@@ -1,0 +1,24 @@
+{
+  "name": "siegmeyer",
+  "version": "0.0.1",
+  "description": "Bot to manage /r/Sekiro discord server",
+  "main": "src/main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zunon/Siegmeyer.git"
+  },
+  "author": "Zunon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Zunon/Siegmeyer/issues"
+  },
+  "homepage": "https://github.com/Zunon/Siegmeyer#readme",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "ts-node": "^6.1.0"
+  }
+}
