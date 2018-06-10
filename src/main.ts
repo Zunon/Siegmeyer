@@ -33,11 +33,22 @@ client.on(`message`, (message: Message) => {
         the command
       */
       case `role`:
-        message.guild.fetchMember(message.author.id).then(user => {
-          user.addRole(message.guild.roles.find(`name`, text[0])).then(user => {
-            user.send(`Successfully added role!`)
-          })
-        })
+        switch(text[0]) {
+          case `add`:
+            message.guild.fetchMember(message.author.id).then(user => {
+              user.addRole(message.guild.roles.find(`name`, text[1])).then(user => {
+                user.send(`Successfully added role!`)
+              })
+            })
+            break
+          case `remove`:
+            message.guild.fetchMember(message.author.id).then(user => {
+              user.removeRole(message.guild.roles.find(`name`, text[1])).then(user => {
+                user.send(`Successfully removed role!`)
+              })
+            })
+        }
+        break
       // If the command wasn't recognized, it replies saying that the command wasn't recognized
       default:
         message.reply("sorry I didn't recognize that command.")
