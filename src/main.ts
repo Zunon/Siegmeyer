@@ -3,6 +3,7 @@
 */
 import { Client, Message, TextChannel, MessageReaction, User, Channel, GuildMember, Guild } from "discord.js" // Import needed classes from discord.js library
 import config from "../config"
+import { addRole, removeRole } from "./handlers";
 // Instantiate a client to use it
 const client: Client = new Client()
 /*
@@ -35,18 +36,13 @@ client.on(`message`, (message: Message) => {
       case `role`:
         switch(text[0]) {
           case `add`:
-            message.guild.fetchMember(message.author.id).then(user => {
-              user.addRole(message.guild.roles.find(`name`, text[1])).then(user => {
-                user.send(`Successfully added role!`)
-              })
-            })
+            addRole(message, text)
             break
           case `remove`:
-            message.guild.fetchMember(message.author.id).then(user => {
-              user.removeRole(message.guild.roles.find(`name`, text[1])).then(user => {
-                user.send(`Successfully removed role!`)
-              })
-            })
+            removeRole(message, text)
+            break
+          default:
+            message.reply(`Please use the format !role <add | remove> <role>`)
         }
         break
       // If the command wasn't recognized, it replies saying that the command wasn't recognized
