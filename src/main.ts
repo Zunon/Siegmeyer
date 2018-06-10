@@ -1,7 +1,7 @@
 /*
   ------------ IMPORTS, INSTANCES, AND VARIABLES ------------
 */
-import { Client, Message, TextChannel, MessageReaction, User, Channel, GuildMember, Guild } from "discord.js" // Import needed classes from discord.js library
+import { Client, Message } from "discord.js" // Import needed classes from discord.js library
 import config from "../config"
 import { addRole, removeRole } from "./handlers";
 // Instantiate a client to use it
@@ -23,8 +23,10 @@ client.on(`message`, (message: Message) => {
   // Check if message is a command
   if(message.content.startsWith(config.prefix)) {
     // Splits message into command and arguments
-    var text: string[] = message.content.toLowerCase().split(` `)
-    var command: string = text[0].substr(1)
+    let
+      text: string[] = message.content.toLowerCase().split(` `),
+      command: string = text[0].substr(1)
+
     text.shift()
     // Matches command with known commands
     switch(command) {
@@ -36,9 +38,11 @@ client.on(`message`, (message: Message) => {
       case `role`:
         switch(text[0]) {
           case `add`:
+            text.shift()
             addRole(message, text)
             break
           case `remove`:
+            text.shift()
             removeRole(message, text)
             break
           default:
