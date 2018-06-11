@@ -28,7 +28,7 @@ export function removeRole(message: Message, commandArguments: string[]) {
         message.reply(`Removed Role ${roleName}`)
       },
       error => {
-        message.reply(`Couldn't remove role ${roleName}\n${error}`)
+        message.reply(`Couldn't remove role ${roleName}\n${error},\n${error.code}`)
       }
     )
   })
