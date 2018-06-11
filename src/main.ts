@@ -1,9 +1,9 @@
 /*
   ------------ IMPORTS, INSTANCES, AND VARIABLES ------------
 */
-import { Client, Message } from "discord.js" // Import needed classes from discord.js library
+import { Client, Message, GuildMember } from "discord.js" // Import needed classes from discord.js library
 import config from "../config"
-import { addRole, removeRole } from "./handlers";
+import { addRole, removeRole, rawReactionEmitter } from "./handlers";
 // Instantiate a client to use it
 const client: Client = new Client()
 /*
@@ -39,11 +39,11 @@ client.on(`message`, (message: Message) => {
         switch(text[0]) {
           case `add`:
             text.shift()
-            addRole(message, text)
+            addRole(message.member, text)
             break
           case `remove`:
             text.shift()
-            removeRole(message, text)
+            removeRole(message.member, text)
             break
           default:
             message.reply(`Please use the format !role <add | remove> <role>`)
@@ -55,7 +55,39 @@ client.on(`message`, (message: Message) => {
     }
   }
 })
+client.on(`raw`, rawEvent => rawReactionEmitter(rawEvent, client))
+client.on(`messageReactionAdd`, (reaction, user) => {
+  if(reaction.message.id === config.roleMessage) {
+    let
+      guild = reaction.message.guild,
+      member = guild.members.find(`id`, user.id)
 
+    switch(reaction.emoji.name) {
+      case `ps4`:
+        addRole(member, ['PS4'])
+        break
+      case `💻`:
+        addRole(member, ['PC'])
+        break
+    }
+  }
+})
+
+client.on(`messageReactionRemove`, (reaction, user) => {
+  let
+      guild = reaction.message.guild,
+      member = guild.members.find(`id`, user.id)
+  if(reaction.message.id === config.roleMessage) {
+    switch(reaction.emoji.name) {
+      case `ps4`:
+        removeRole(member, ['PS4'])
+        break
+      case `💻`:
+        removeRole(member, ['PC'])
+        break
+    }
+  }
+})
 /**
  * As soon as the bot is up and ready, confirm to console
  * @listens ready

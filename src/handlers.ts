@@ -1,35 +1,61 @@
-import { Message } from "discord.js";
+import { Message, TextChannel, User, Client, GuildMember, Guild } from "discord.js"
 
-export function addRole(message: Message, commandArguments: string[]) {
+const reactionEvents = {
+  MESSAGE_REACTION_ADD: `messageReactionAdd`,
+  MESSAGE_REACTION_REMOVE: `messageReactionRemove`
+}
+
+export function addRole(user: GuildMember, commandArguments: string[]) {
   let 
-    guild = message.guild
+    guild = user.guild
 
   commandArguments.forEach(roleName => {
     let role = guild.roles.find(`name`, roleName.toUpperCase())
-    message.member.addRole(role).then(
+    user.addRole(role).then(
       () => {
-        message.reply(`Added Role ${roleName}`)
+        user.send(`Added Role ${roleName}`)
       },
       error => {
-        message.reply(`Couldn't add role ${roleName}\n${error}`)
+        user.send(`Couldn't add role ${roleName}\n${error}`)
       }
     )
   })
 }
 
-export function removeRole(message: Message, commandArguments: string[]) {
+export function removeRole(user: GuildMember, commandArguments: string[]) {
   let 
-    guild = message.guild
-
+    guild = user.guild
   commandArguments.forEach(roleName => {
     let role = guild.roles.find(`name`, roleName.toUpperCase())
-    message.member.removeRole(role).then(
+    user.removeRole(role).then(
       () => {
-        message.reply(`Removed Role ${roleName}`)
+        user.send(`Removed Role ${roleName}`)
       },
       error => {
-        message.reply(`Couldn't remove role ${roleName}\n${error},\n${error.code}`)
+        user.send(`Couldn't remove role ${roleName}\n${error},\n${error.code}`)
       }
     )
   })
+}
+
+export async function rawReactionEmitter(rawEvent: any, client: Client) {
+  if(!reactionEvents.hasOwnProperty(rawEvent.t)) {
+    return
+  }
+
+  const
+    { d: data } = rawEvent,
+    user: User = client.users.get(data.user_id),
+    channel: TextChannel = client.channels.get(data.channel_id) as TextChannel
+
+  if(channel.messages.has(data.message_id)) {
+    return
+  }
+
+  const
+    message: Message = await channel.fetchMessage(data.message_id),
+    emojiKey: string = (data.emoji.id) ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name,
+    reaction = message.reactions.get(emojiKey)
+  
+  client.emit(reactionEvents[rawEvent.t], reaction, user)
 }
