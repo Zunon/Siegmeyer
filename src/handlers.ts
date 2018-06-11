@@ -23,15 +23,14 @@ export function removeRole(message: Message, commandArguments: string[]) {
     guild = message.guild
 
   commandArguments.forEach(roleName => {
-    guild.fetchMember(message.author.id).then(user => {
-      user.removeRole(guild.roles.find(`name`, roleName.toUpperCase())).then(
-        user => {
-          user.send(`Successfully removed role!`)
-        },
-        error => {
-          user.send(`Error, couldn't remove role ${roleName}\n${error}`)
-        }
-      )
-    })
+    let role = guild.roles.find(`name`, roleName.toUpperCase())
+    message.member.removeRole(role).then(
+      user => {
+        message.reply(`Removed Role ${roleName}`)
+      },
+      error => {
+        message.reply(`Couldn't remove role ${roleName}\n${error}`)
+      }
+    )
   })
 }
