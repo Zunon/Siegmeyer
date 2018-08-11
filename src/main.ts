@@ -63,11 +63,14 @@ client.on(`messageReactionAdd`, (reaction, user) => {
       member = guild.members.find(`id`, user.id)
 
     switch(reaction.emoji.name) {
-      case `ps4`:
-        addRole(member, ['PS4'])
+      case `sekiro`:
+        addRole(member, ['Sekiro'])
         break
-      case `💻`:
-        addRole(member, ['PC'])
+      case `darksouls`:
+        addRole(member, ['Dark Souls'])
+        break
+      case `blood_vial`:
+        addRole(member, ['Bloodborne'])
         break
     }
   }
@@ -79,11 +82,14 @@ client.on(`messageReactionRemove`, (reaction, user) => {
       member = guild.members.find(`id`, user.id)
   if(reaction.message.id === config.roleMessage) {
     switch(reaction.emoji.name) {
-      case `ps4`:
-        removeRole(member, ['PS4'])
+      case `blood_vial`:
+        removeRole(member, ['Bloodborne'])
         break
-      case `💻`:
-        removeRole(member, ['PC'])
+      case `darksouls`:
+        removeRole(member, ['Dark Souls'])
+        break
+      case `sekiro`:
+        removeRole(member, ['Sekiro'])
         break
     }
   }

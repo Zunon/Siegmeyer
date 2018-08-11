@@ -10,7 +10,7 @@ export function addRole(user: GuildMember, commandArguments: string[]) {
     guild = user.guild
 
   commandArguments.forEach(roleName => {
-    let role = guild.roles.find(`name`, roleName.toUpperCase())
+    let role = guild.roles.find(`name`, roleName)
     user.addRole(role).then(
       () => {
         user.send(`Added Role ${roleName}`)
@@ -26,7 +26,7 @@ export function removeRole(user: GuildMember, commandArguments: string[]) {
   let 
     guild = user.guild
   commandArguments.forEach(roleName => {
-    let role = guild.roles.find(`name`, roleName.toUpperCase())
+    let role = guild.roles.find(`name`, roleName)
     user.removeRole(role).then(
       () => {
         user.send(`Removed Role ${roleName}`)
